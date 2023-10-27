@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask import request
-import json
+
 from recommendation.core import get_genre_recommendations
 app = Flask(__name__)
 
@@ -26,9 +26,11 @@ def get_movies():
         for i in recommended_movie_titles:
             dictionary["movies"].append(i)
         return jsonify(dictionary)
-    except FileNotFoundError:
-        return jsonify({"error": "El archivo 'movies.json' no se encontró."}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+    
 
-
+def create_app():
+    return app
 if __name__ == '__main__':
     app.run(debug=True)
