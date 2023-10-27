@@ -5,6 +5,7 @@ from recommendation.core import get_genre_recommendations
 app = Flask(__name__)
 
 
+<<<<<<< Updated upstream
 # @app.route('/api/movies', methods=['GET'])
 # def get_movies():
 #     try:
@@ -26,6 +27,15 @@ def get_movies():
         for i in recommended_movie_titles:
             dictionary["movies"].append(i)
         return jsonify(dictionary)
+=======
+@app.route('/api/movies/<n>', methods=['GET'])
+def get_movies(n):
+    try:
+        n = int(n)
+        with open('movies.json', 'r') as json_file:
+            data = json.load(json_file)
+        return jsonify(data["movies"][:n])
+>>>>>>> Stashed changes
     except FileNotFoundError:
         return jsonify({"error": "El archivo 'movies.json' no se encontró."}), 404
 
