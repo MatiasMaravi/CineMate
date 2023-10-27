@@ -1,4 +1,21 @@
-from .get_genre_recommendations import *
+
+# Esta recomendacion es basada en una pelicula que ya vio el usuario
+
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MultiLabelBinarizer
+
+movies = pd.read_csv('data/movies.csv')
+
+# Procesar géneros utilizando MultiLabelBinarizer
+mlb = MultiLabelBinarizer()
+genre_matrix = mlb.fit_transform(movies['genres'].str.split('|'))
+
+# Calcular similitud de coseno entre géneros
+cosine_sim = cosine_similarity(genre_matrix, genre_matrix)
+
+# Crear un DataFrame de similitud de géneros
+cosine_similarity_matrix = pd.DataFrame(cosine_sim, index=movies['title'], columns=movies['title'])
 
 def get_genre_recommendations(movie_title, n=5):
     similar_movies = cosine_similarity_matrix.loc[movie_title]

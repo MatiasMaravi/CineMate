@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask import request
 import json
-from test_IA.mothermodule import get_genre_recommendations
+from test_IA.core import get_genre_recommendations
 app = Flask(__name__)
 
 
