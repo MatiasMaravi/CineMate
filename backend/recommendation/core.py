@@ -4,8 +4,9 @@
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MultiLabelBinarizer
+import os
 
-movies = pd.read_csv('data/movies.csv')
+movies = pd.read_csv('../data/movies.csv')
 
 # Procesar géneros utilizando MultiLabelBinarizer
 mlb = MultiLabelBinarizer()
