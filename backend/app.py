@@ -22,12 +22,13 @@ def get_movies():
         # Obtener los nombres de las películas recomendadas
         recommended_movie_titles = recommendations.index
         
-
+        diccionario= {"movies":[]}
         for title in recommended_movie_titles:
             data_to_insert = {"title": title}
+            diccionario["movies"].append(title)
             data, count = supabase.table("movies").insert(data_to_insert).execute()
 
-        return jsonify({"response": "ok"}), 200
+        return jsonify(diccionario), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 404
     
