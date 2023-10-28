@@ -27,3 +27,5 @@ venv/
 venv
 env
 __pycache__/
+prueba.py
+.env
