@@ -1,12 +1,14 @@
 import openai
 import time
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-clave = "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"
-
+clave = os.getenv("OPENAI_KEY")
 # Configura la API key
 openai.api_key = clave
 
-def IA(generos):
+def IA(generos, actores):
 
     # Genera una respuesta a partir de un prompt
 
@@ -14,6 +16,10 @@ def IA(generos):
     
     for i in generos:
         promt = promt + i + ","
+
+    promt += " con los actores, "
+    for i in actores:
+        promt = promt + i + ","     
     
     promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas."
 
@@ -45,11 +51,6 @@ def IA(generos):
     }
 
     return respuesta
-
-
-respuesta= IA(["Terror","Comedia"])
-
-print(respuesta)
 
 
 
