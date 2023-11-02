@@ -1,6 +1,7 @@
-from recommendation.core import get_genre_recommendations
+#from recommendation.core import get_genre_recommendations
 from flask import Flask, jsonify, request
 from supabase import create_client, Client
+from DB.peliculas_usuarios import usuario_peliculas
 from IA.api_chat import IA
 import os 
 from dotenv import load_dotenv
@@ -16,6 +17,7 @@ supabase: Client = create_client(url, key)
 def consulta_IA():
     try:
         request_data = request.json
+        usuario= request_data['usuario']
         movie_generos = request_data['generos']
         movie_actores = request_data['actores']
         recommendations = IA(movie_generos, movie_actores)
@@ -23,11 +25,7 @@ def consulta_IA():
         # Obtener los nombres de las películas recomendadas
         recommended_movie_titles = recommendations["movies"]
 
-        diccionario= {"movies":[]}
-        for title in recommended_movie_titles:
-            data_to_insert = {"title": title}
-            diccionario["movies"].append(title)
-            data, count = supabase.table("movies").insert(data_to_insert).execute()
+        diccionario= usuario_peliculas(usuario,recommended_movie_titles)
 
         return jsonify(diccionario), 200
     except Exception as e:
