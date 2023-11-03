@@ -24,10 +24,12 @@ class _HomePageState extends State<HomePage> {
     // Obtener los datos de la API
     //getMovies();
     loadMovies();
+    print("Test: ");
+    print(arrayMovies);
   }
 
   Future<void> loadMovies() async {
-    final url = Uri.parse('http://204.199.168.25:5000');
+    final url = Uri.parse('http://127.0.0.1:5000');
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -40,6 +42,7 @@ class _HomePageState extends State<HomePage> {
       }),
     );
     if (response.statusCode == 200) {
+      arrayMovies = jsonDecode(response.body)['movies'];
       print('Solicitud POST exitosa: ${response.body}');
     } else {
       print('Error en la solicitud POST: ${response.statusCode}');
