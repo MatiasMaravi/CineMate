@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final movie = movieFromJson(jsonString);
+
 import 'dart:convert';
 
 List<Movie> movieFromJson(String str) => List<Movie>.from(json.decode(str).map((x) => Movie.fromJson(x)));
@@ -5,73 +9,133 @@ List<Movie> movieFromJson(String str) => List<Movie>.from(json.decode(str).map((
 String movieToJson(List<Movie> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Movie {
-  final bool adult;
-  final String backdropPath;
-  final List<int> genreIds;
-  final int id;
-  final String originalLanguage;
-  final String originalTitle;
-  final String overview;
-  final double popularity;
-  final String posterPath;
-  final String releaseDate;
-  final String title;
-  final bool video;
-  final double voteAverage;
-  final int voteCount;
+    String title;
+    String year;
+    String rated;
+    String released;
+    String runtime;
+    String genre;
+    String director;
+    String writer;
+    String actors;
+    String plot;
+    String language;
+    String country;
+    String awards;
+    String poster;
+    List<Rating> ratings;
+    String metascore;
+    String imdbRating;
+    String imdbVotes;
+    String imdbId;
+    String type;
+    String dvd;
+    String boxOffice;
+    String production;
+    String website;
+    String response;
 
-  Movie({
-    required this.adult,
-    required this.backdropPath,
-    required this.genreIds,
-    required this.id,
-    required this.originalLanguage,
-    required this.originalTitle,
-    required this.overview,
-    required this.popularity,
-    required this.posterPath,
-    required this.releaseDate,
-    required this.title,
-    required this.video,
-    required this.voteAverage,
-    required this.voteCount,
-  });
+    Movie({
+        required this.title,
+        required this.year,
+        required this.rated,
+        required this.released,
+        required this.runtime,
+        required this.genre,
+        required this.director,
+        required this.writer,
+        required this.actors,
+        required this.plot,
+        required this.language,
+        required this.country,
+        required this.awards,
+        required this.poster,
+        required this.ratings,
+        required this.metascore,
+        required this.imdbRating,
+        required this.imdbVotes,
+        required this.imdbId,
+        required this.type,
+        required this.dvd,
+        required this.boxOffice,
+        required this.production,
+        required this.website,
+        required this.response,
+    });
 
-  factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(
-      adult: json['adult'] ?? false,
-      backdropPath: json['backdrop_path'] ?? '',
-      genreIds: List<int>.from(json['genre_ids'] ?? []),
-      id: json['id'] ?? 0,
-      originalLanguage: json['original_language'] ?? '',
-      originalTitle: json['original_title'] ?? '',
-      overview: json['overview'] ?? '',
-      popularity: (json['popularity'] ?? 0.0).toDouble(),
-      posterPath: json['poster_path'] ?? '',
-      releaseDate: json['release_date'] ?? '',
-      title: json['title'] ?? 'Unknown',
-      video: json['video'] ?? false,
-      voteAverage: (json['vote_average'] ?? 0.0).toDouble(),
-      voteCount: json['vote_count'] ?? 0,
+    factory Movie.fromJson(Map<String, dynamic> json) => Movie(
+        title: json["Title"],
+        year: json["Year"],
+        rated: json["Rated"],
+        released: json["Released"],
+        runtime: json["Runtime"],
+        genre: json["Genre"],
+        director: json["Director"],
+        writer: json["Writer"],
+        actors: json["Actors"],
+        plot: json["Plot"],
+        language: json["Language"],
+        country: json["Country"],
+        awards: json["Awards"],
+        poster: json["Poster"],
+        ratings: List<Rating>.from(json["Ratings"].map((x) => Rating.fromJson(x))),
+        metascore: json["Metascore"],
+        imdbRating: json["imdbRating"],
+        imdbVotes: json["imdbVotes"],
+        imdbId: json["imdbID"],
+        type: json["Type"],
+        dvd: json["DVD"],
+        boxOffice: json["BoxOffice"],
+        production: json["Production"],
+        website: json["Website"],
+        response: json["Response"],
     );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'adult': adult,
-      'backdrop_path': backdropPath,
-      'genre_ids': genreIds,
-      'id': id,
-      'original_language': originalLanguage,
-      'original_title': originalTitle,
-      'overview': overview,
-      'popularity': popularity,
-      'poster_path': posterPath,
-      'release_date': releaseDate,
-      'title': title,
-      'video': video,
-      'vote_average': voteAverage,
-      'vote_count': voteCount,
+    Map<String, dynamic> toJson() => {
+        "Title": title,
+        "Year": year,
+        "Rated": rated,
+        "Released": released,
+        "Runtime": runtime,
+        "Genre": genre,
+        "Director": director,
+        "Writer": writer,
+        "Actors": actors,
+        "Plot": plot,
+        "Language": language,
+        "Country": country,
+        "Awards": awards,
+        "Poster": poster,
+        "Ratings": List<dynamic>.from(ratings.map((x) => x.toJson())),
+        "Metascore": metascore,
+        "imdbRating": imdbRating,
+        "imdbVotes": imdbVotes,
+        "imdbID": imdbId,
+        "Type": type,
+        "DVD": dvd,
+        "BoxOffice": boxOffice,
+        "Production": production,
+        "Website": website,
+        "Response": response,
     };
-  }
+}
+
+class Rating {
+    String source;
+    String value;
+
+    Rating({
+        required this.source,
+        required this.value,
+    });
+
+    factory Rating.fromJson(Map<String, dynamic> json) => Rating(
+        source: json["Source"],
+        value: json["Value"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "Source": source,
+        "Value": value,
+    };
 }
