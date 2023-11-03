@@ -1,0 +1,10 @@
+{
+  "generos": ["Acción", "Comedia", "Drama", "Ciencia ficción", "Terror"],
+  "actores": [
+    "Tom Hanks",
+    "Scarlett Johansso",
+    "Leonardo DiCaprio",
+    "Jennifer Lawrence",
+    "Brad Pitt"
+  ]
+}
