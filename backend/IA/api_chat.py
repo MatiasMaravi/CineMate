@@ -4,15 +4,15 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-clave = os.getenv("OPENAI_KEY")
+clave = "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"
 # Configura la API key
 openai.api_key = clave
 
-def IA(generos, actores):
+def IA_peliculas(generos, actores):
 
     # Genera una respuesta a partir de un prompt
 
-    promt="Recomiendame solo los nombres de 5  peliculas sin informacion antes ni despues , de generos de "
+    promt="Recomiendame solo los nombres de 10 peliculas sin informacion antes ni despues , de generos de "
     
     for i in generos:
         promt = promt + i + ","
@@ -51,6 +51,15 @@ def IA(generos, actores):
     }
 
     return respuesta
+
+def IA_generos():
+
+    promt="Recomiendame solo los nombres de 5 generos "
+
+    pass
+    
+
+
 
 
 

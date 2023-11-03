@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from supabase import create_client, Client
 from DB.peliculas_usuarios import usuario_peliculas
-from IA.api_chat import IA
+from IA.api_chat import IA_peliculas,IA_generos
 import os 
 from dotenv import load_dotenv
 load_dotenv()
@@ -20,7 +20,7 @@ def consulta_IA():
         usuario= request_data['usuario']
         movie_generos = request_data['generos']
         movie_actores = request_data['actores']
-        recommendations = IA(movie_generos, movie_actores)
+        recommendations = IA_peliculas(movie_generos,movie_actores)
         print(recommendations)
         # Obtener los nombres de las películas recomendadas
         recommended_movie_titles = recommendations["movies"]
@@ -29,7 +29,17 @@ def consulta_IA():
 
         return jsonify(diccionario), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 404    
+        return jsonify({"error": str(e)}), 404
+
+@app.route('/generos', methods=['POST'])
+def obtener_generos():
+    try:
+        generos=IA_generos()
+        print(generos)
+        return jsonify(generos), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+
 
 def create_app():
     return app

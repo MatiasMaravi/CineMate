@@ -6,10 +6,6 @@ url = "https://inlhowinxzuskmodrpix.supabase.co"
 key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlubGhvd2lueHp1c2ttb2RycGl4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTY5NjI5ODYsImV4cCI6MjAxMjUzODk4Nn0.jII7SbPyktiAuUrKirqQ6eD7_2uu-Mb8crpnT0MkMfo"
 supabase: Client = create_client(url, key)
 
-
-
-
-
 class Usuario:
     def _init_(self, email, name, password):
         self.email = email

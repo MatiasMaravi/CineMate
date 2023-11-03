@@ -11,20 +11,17 @@ supabase = create_client(url, key)
 
 def usuario_peliculas(usuario,peliculas):
 
-    table_1="preference_movie"
+    table_1="r_history"
 
     try:
-
             diccionario= {"movies":[]}
             for title in peliculas:
-                data_to_insert = {"email_user": usuario, "title": title,"interacion":0,"date": datetime.date.today() }
+                data_to_insert = {"email_user": usuario, "title_movie": title,"interaction":0,"date":datetime.datetime.now().date().isoformat()}
                 diccionario["movies"].append(title)
                 data, count = supabase.table(table_1).insert(data_to_insert).execute()
             return diccionario    
         
-
     except Exception as e:
         print(f'Error: {e}')
         return None
-table_1 = 'preference_actor'
 
