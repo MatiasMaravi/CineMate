@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 //import 'package:frontend/models/post.dart';
 import 'package:frontend/models/movie.dart';
@@ -15,55 +17,46 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Movie>? movies;
   var isLoaded = false;
-  //var arrayMovies = ['Toy Story', 'The Lion King', 'The Incredibles', 'Shrek', 'The Lego Movie'];
   var arrayMovies = [];
+
   @override
   void initState() {
     super.initState();
-    
-    // Obtener los datos de la API
-    //getMovies();
     loadMovies();
     print("Test: ");
     print(arrayMovies);
   }
 
   Future<void> loadMovies() async {
-    final url = Uri.parse('http://127.0.0.1:5000');
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'usuario': 'matias@gozu.com',
-        'generos': ['accion', 'drama'],
-        'actores': ['tom cruise', 'brad pitt'],
-      }),
-    );
-    if (response.statusCode == 200) {
-      arrayMovies = jsonDecode(response.body)['movies'];
+  final url = Uri.parse('http://10.0.2.2:5000/movies');
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'usuario': 'matias@gozu.com',
+      'generos': ['accion', 'drama'],
+      'actores': ['tom cruise', 'brad pitt'],
+    }),
+  );
+  if (response.statusCode == 200) {
+    final responseData = jsonDecode(response.body);
+    isLoaded = true;
+    if (responseData.containsKey('movies')) {
+      setState(() {
+        arrayMovies = json.decode(response.body)['movies'];
+      });
       print('Solicitud POST exitosa: ${response.body}');
     } else {
-      print('Error en la solicitud POST: ${response.statusCode}');
+      print('Error en la solicitud POST: No se encontró la propiedad "movies" en la respuesta.');
     }
+  } else {
+    print('Error en la solicitud POST: ${response.statusCode}');
   }
-
-  /*
-  getMovies() async {
-    movies = await RemoteService().getMovies(arrayMovies);
-    if (movies != null) {
-      movies!.sort((a, b) {
-        final double ratingA = double.parse(a.imdbRating);
-        final double ratingB = double.parse(b.imdbRating);
-        return ratingB.compareTo(ratingA);
-      });
-
-      setState(() {
-        isLoaded = true;
-      });
-    }
-  }*/
+  print(arrayMovies);
+  isLoaded = true;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +66,12 @@ class _HomePageState extends State<HomePage> {
           'Cinemate',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-          )
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
-      body: Visibility(
-        visible: isLoaded,
-        replacement: const Center(
-          child: CircularProgressIndicator(),
-        ),
-        child: const Text(
-          'Hola',
-          style: TextStyle(
-            fontWeight: FontWeight.bold, 
-          ),
-        ),
-      ),
+      body: isLoaded ? Text(arrayMovies.toString()) : CircularProgressIndicator(),
     );
   }
 }
