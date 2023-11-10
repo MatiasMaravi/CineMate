@@ -5,6 +5,8 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MultiLabelBinarizer
 import os
+import requests
+
 
 movies = pd.read_csv('../data/movies.csv')
 

@@ -9,8 +9,10 @@ class APITestCase(unittest.TestCase):
 
     def test_get_movies_endpoint(self):
         data = {
-            "title": "Spies Like Us (1985)" #Cambiar nombre para cada test
-        }
+            "usuario":"ana1@gmail.com",
+            "generos":["terror","comedia"],
+            "actores":["Brad Pit"]
+}
         response = self.app.post('/movies', json=data)
         self.assertEqual(response.status_code, 200)
 
@@ -23,3 +25,5 @@ class APITestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
