@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from supabase import create_client, Client
 from DB.peliculas_usuarios import usuario_peliculas
-from IA.api_chat import IA_peliculas,IA_generos
+from IA.api_chat import IA_peliculas,IA_generos,IA_anios,IA_idiomas
 import os 
 from dotenv import load_dotenv
 load_dotenv()
@@ -40,6 +40,39 @@ def obtener_generos():
     except Exception as e:
         return jsonify({"error": str(e)}), 404
 
+@app.route('/anios', methods=['POST'])
+def obtener_generos():
+    try:
+        request_data = request.json
+        usuario = request_data['usuario']
+        anios = request_data['anios']
+        recommendations = IA_anios(anios)
+        print(recommendations)
+        # Obtener los nombres de las películas recomendadas
+        recommended_movie_titles = recommendations["movies"]
+
+        diccionario= usuario_peliculas(usuario, recommended_movie_titles)
+
+        return jsonify(diccionario), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+
+@app.route('/idiomas', methods=['POST'])
+def obtener_generos():
+    try:
+        request_data = request.json
+        usuario = request_data['usuario']
+        idiomas = request_data['idiomas']
+        recommendations = IA_idiomas(idiomas)
+        print(recommendations)
+        # Obtener los nombres de las películas recomendadas
+        recommended_movie_titles = recommendations["movies"]
+
+        diccionario= usuario_peliculas(usuario, recommended_movie_titles)
+
+        return jsonify(diccionario), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
 
 def create_app():
     return app
