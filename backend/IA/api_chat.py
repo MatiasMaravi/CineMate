@@ -14,7 +14,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 omdb_api_key = os.getenv("OMDB_API_KEY")
 
 
-clave = "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"
+clave = os.getenv("OPENAI_API_KEY")
 # Configura la API key
 openai.api_key = clave
 
