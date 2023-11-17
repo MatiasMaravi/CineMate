@@ -5,6 +5,7 @@ from DB.peliculas_usuarios import usuario_peliculas
 from IA.api_chat import IA_peliculas
 import os 
 from dotenv import load_dotenv
+import datetime
 app = Flask(__name__)
 
 load_dotenv()
@@ -50,7 +51,7 @@ def insertar():
     if(len(movies.data)):
         supabase.table('r_history').update({'interaction': interaction}).eq('email_user', email_user).eq('title_movie', title_movie).execute()
     else:
-        supabase.table('r_history').insert([{'email_user': email_user, 'title_movie': title_movie, 'interaction': interaction}]).execute()
+        supabase.table('r_history').insert([{'email_user': email_user, 'title_movie': title_movie, 'interaction': interaction,"date":datetime.datetime.now().date().isoformat()}]).execute()
         
     return jsonify({"message": "Se ha insertado la pelicula"}), 200
 
