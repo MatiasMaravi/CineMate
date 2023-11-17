@@ -8,10 +8,6 @@ url = os.getenv("URL")
 key = os.getenv("KEY")
 supabase: Client = create_client(url, key)
 
-
-
-
-
 class Usuario:
     def _init_(self, email, name, password):
         self.email = email
