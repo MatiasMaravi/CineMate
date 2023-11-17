@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 
 
-url = "https://inlhowinxzuskmodrpix.supabase.co"
+url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 

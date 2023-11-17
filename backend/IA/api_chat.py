@@ -4,9 +4,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-clave = "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"
 # Configura la API key
-openai.api_key = clave
+openai.api_key = os.getenv("API_KEY")
 
 def IA_peliculas(generos, actores):
 
