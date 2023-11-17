@@ -54,8 +54,7 @@ def IA_peliculas(generos, actores,username):
         messages=[
             {"role": "system", "content": promt },
         ],
-        temperature=0.7
-    )
+    temperature=0.7)
 
     end_time = time.time()
 
