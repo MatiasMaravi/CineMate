@@ -17,7 +17,7 @@ class SupabaseManager:
                     'genre': genero
                 })
 
-        response = self.supabase.table('genre_recomendation').upsert(datos_mock, on_conflict=['email_user', 'genre']).execute()
+        response = self.supabase.table('genre_recommendation').upsert(datos_mock, on_conflict=['email_user', 'genre']).execute()
 
 
         print(response)
