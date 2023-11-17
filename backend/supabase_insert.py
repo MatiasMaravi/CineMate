@@ -47,8 +47,8 @@ def main():
 
     # Ejemplo de usuarios y sus géneros
     usuarios_generos_ejemplo = {
-        'Ana': ['Rock', 'Pop', 'Salsa'],
-        'Juan': ['Pop', 'Reggae', 'Jazz']
+        'Ana': ['Aventura', 'Acción'],
+        'Juan': ['Comedia', 'Drama']
     }
 
     supabase_manager.insertar_generos(usuarios_generos_ejemplo)
