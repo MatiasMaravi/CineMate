@@ -47,16 +47,16 @@ def main():
 
     # Ejemplo de usuarios y sus géneros
     usuarios_generos_ejemplo = {
-        'Ana': ['Aventura', 'Acción'],
-        'Juan': ['Comedia', 'Drama']
+        'test1@gmail.com': ['Aventura', 'Acción'],
+        'test2@gmail.com': ['Comedia', 'Drama']
     }
 
     supabase_manager.insertar_generos(usuarios_generos_ejemplo)
 
 
     usuarios_actores_ejemplo = {
-        'Ana': ['Brad Pitt', 'Emma Watson', 'Tom Hanks'],
-        'Juan': ['Johnny Depp', 'Scarlett Johansson']
+        'test1@gmail.com': ['Brad Pitt', 'Emma Watson', 'Tom Hanks'],
+        'test2@gmail.com': ['Johnny Depp', 'Scarlett Johansson']
     }
 
     supabase_manager.insertar_actores(usuarios_actores_ejemplo)
