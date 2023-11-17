@@ -2,25 +2,47 @@ import openai
 import time
 import os
 from dotenv import load_dotenv
+from DB.obtener_peliculas import obtener_peliculas_BD
+from supabase import Client, create_client
+from dotenv import load_dotenv
+
 load_dotenv()
 
-clave = "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"
 # Configura la API key
-openai.api_key = clave
+openai.api_key = os.getenv("API_KEY")
 
-def IA_peliculas(generos, actores):
+def IA_peliculas(generos, actores,username):
+
+    peliculas=obtener_peliculas_BD(username)
 
     # Genera una respuesta a partir de un prompt
-
-    promt="Recomiendame solo los nombres de 10 peliculas sin informacion antes ni despues , de generos de "
+    promt="Recomiendame solo los nombres de 5 peliculas distintas sin informacion antes ni despues ,"
     
-    for i in generos:
-        promt = promt + i + ","
+    if len(generos)!=0:
+        promt += "de generos, "
+        for i in generos:
+            promt = promt + i + ","
 
-    promt += " con los actores, "
-    for i in actores:
-        promt = promt + i + ","     
-    
+    if len(actores)!=0:
+        promt += " con los actores, "
+        for i in actores:
+            promt = promt + i + ","        
+
+    if len(peliculas)!=0:
+
+        promt += " sabiendo que me gustan las peliculas "
+
+        for i in peliculas:
+            if i["like"]==True:
+                promt = promt + i["title"] + ","
+
+
+        promt += " y sabiendo que no me gustan las peliculas "
+
+        for i in peliculas:
+            if i["like"]==False:
+                promt = promt + i["title"] + ","                 
+        
     promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas."
 
     print(promt)
@@ -52,11 +74,6 @@ def IA_peliculas(generos, actores):
 
     return respuesta
 
-def IA_generos():
-
-    promt="Recomiendame solo los nombres de 5 generos "
-
-    pass
     
 
 

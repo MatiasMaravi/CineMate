@@ -2,14 +2,14 @@
 from flask import Flask, jsonify, request
 from supabase import create_client, Client
 from DB.peliculas_usuarios import usuario_peliculas
-from IA.api_chat import IA_peliculas,IA_generos
+from IA.api_chat import IA_peliculas
 import os 
 from dotenv import load_dotenv
-load_dotenv()
 app = Flask(__name__)
 
+load_dotenv()
 
-url = "https://inlhowinxzuskmodrpix.supabase.co"
+url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
@@ -20,7 +20,12 @@ def consulta_IA():
         usuario= request_data['usuario']
         movie_generos = request_data['generos']
         movie_actores = request_data['actores']
-        recommendations = IA_peliculas(movie_generos,movie_actores)
+        if(len(movie_generos)==0):
+            recommendations = IA_peliculas([],movie_actores,usuario)
+        elif(len(movie_actores)==0):
+            recommendations = IA_peliculas(movie_generos,[],usuario)
+        elif (len(movie_generos)!=0 and len(movie_actores)!=0):
+            recommendations = IA_peliculas(movie_generos,movie_actores,usuario)
         print(recommendations)
         # Obtener los nombres de las películas recomendadas
         recommended_movie_titles = recommendations["movies"]
@@ -31,14 +36,14 @@ def consulta_IA():
     except Exception as e:
         return jsonify({"error": str(e)}), 404
 
-@app.route('/generos', methods=['POST'])
+"""@app.route('/generos', methods=['POST'])
 def obtener_generos():
     try:
         generos=IA_generos()
         print(generos)
         return jsonify(generos), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 404
+        return jsonify({"error": str(e)}), 404"""
 
 
 def create_app():
