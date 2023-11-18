@@ -1,0 +1,1 @@
+supabase.table('r_history').update({'interaction': '1'}).eq('email_user', 'cristianvargas.com').eq('title_movie', 'Hotel Rwanda').execute()
