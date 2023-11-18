@@ -1,0 +1,4 @@
+#Fri Nov 03 20:39:52 PET 2023
+base.0=/Users/leoisidro/Library/CloudStorage/OneDrive-UNIVERSIDADDEINGENIERIAYTECNOLOGIA/UTEC_MAC/ING.SOFTWARE/CineMate/frontend_landing/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
