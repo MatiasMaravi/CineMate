@@ -13,7 +13,7 @@ supabase = create_client(url, key)
 
 def obtener_peliculas_BD(username):
 
-    data = supabase.table('r_history').select('title_movie','interaction').eq('email_user', username).execute()
+    data = supabase.table('r_history').select('title_movie','interaction').eq('user', username).execute()
     data = json.loads(data.model_dump_json())
     respuesta = []
 

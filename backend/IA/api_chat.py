@@ -11,21 +11,21 @@ load_dotenv()
 # Configura la API key
 openai.api_key = os.getenv("API_KEY")
 
-def IA_peliculas(generos, actores,username):
+def IA_peliculas(genero, actor ,username,n):
 
     peliculas=obtener_peliculas_BD(username)
-
+    n=5-n
     # Genera una respuesta a partir de un prompt
-    promt="Recomiendame solo los nombres de 5 peliculas distintas sin informacion antes ni despues ,"
+    promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas sin informacion antes ni despues ,"
     
-    if len(generos)!=0:
+    if len(genero)!=0:
         promt += "de generos, "
-        for i in generos:
+        for i in genero:
             promt = promt + i + ","
 
-    if len(actores)!=0:
+    if len(actor)!=0:
         promt += " con los actores, "
-        for i in actores:
+        for i in actor:
             promt = promt + i + ","        
 
     if len(peliculas)!=0:
