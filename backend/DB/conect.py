@@ -25,16 +25,11 @@ class Usuario:
 
         print(f'Data: {formatted_data}')
 
-
-
-
-
     def update(self):
         return f'Nombre: {self.nombre}\nApellido: {self.apellido}\nCorreo: {self.correo}'
 
 # Ejemplo de cómo crear un objeto de usuario
-usuario1 = Usuario("alejo@gmail.com", "Alejo", "chupetin23")
+usuario1 = Usuario("test@gmail.com", "Test", "test")
 
 # Acceder a los atributos del usuario
-
 usuario1.insertar()
