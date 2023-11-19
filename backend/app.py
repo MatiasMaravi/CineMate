@@ -31,7 +31,7 @@ def consulta_IA():
         # Obtener los nombres de las películas recomendadas
         recommended_movie_titles = recommendations["movies"]
 
-        diccionario= usuario_peliculas(usuario,recommended_movie_titles)
+        diccionario= usuario_peliculas(usuario,recommended_movie_titles,movie_generos,movie_actores)
 
         return jsonify(diccionario), 200
     except Exception as e:
@@ -43,17 +43,19 @@ def insertar():
     email_user = request_data['email_user']
     title_movie = request_data['title_movie']
     interaction = request_data['interaction']
-    #Select * From r_history where email_user = email_user and title_movie = title_movie
-    #Si no existe, insertar
-    #Si existe, actualizar
+    
+    
     movies = supabase.table('r_history').select('*').eq('email_user', email_user).eq('title_movie', title_movie).execute()
     
-    if(len(movies.data)):
-        supabase.table('r_history').update({'interaction': interaction}).eq('email_user', email_user).eq('title_movie', title_movie).execute()
-    else:
-        supabase.table('r_history').insert([{'email_user': email_user, 'title_movie': title_movie, 'interaction': interaction,"date":datetime.datetime.now().date().isoformat()}]).execute()
+    if len(movies.data) > 0:
+        # Actualizar la columna 'interaction' de todas las películas encontradas
+        for movie in movies.data:
+            supabase.table('r_history').update({'interaction': interaction}).eq('title_movie', movie['title_movie']).eq('email_user', movie['email_user']).execute()
         
-    return jsonify({"message": "Se ha insertado la pelicula"}), 200
+        return jsonify({"message": f"Se han actualizado {len(movies.data)} películas"}), 200
+    else:
+        return jsonify({"message": "No se encontró la película"}), 404
+
 
 
 def create_app():

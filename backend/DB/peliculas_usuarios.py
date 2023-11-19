@@ -13,14 +13,14 @@ key = os.getenv("SUPABASE_KEY")
 supabase = create_client(url, key)
 
 
-def usuario_peliculas(usuario,peliculas):
+def usuario_peliculas(usuario,peliculas,generos,actores):
 
     table_1="r_history"
 
     try:
             diccionario= {"movies":[]}
             for title in peliculas:
-                data_to_insert = {"email_user": usuario, "title_movie": title,"interaction":0,"date":datetime.datetime.now().date().isoformat()}
+                data_to_insert = {"email_user": usuario, "title_movie": title,"interaction":0,"date":datetime.datetime.now().date().isoformat(),"genres": generos, "actors": actores}
                 diccionario["movies"].append(title)
                 data, count = supabase.table(table_1).insert(data_to_insert).execute()
             return diccionario
