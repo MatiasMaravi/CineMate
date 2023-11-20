@@ -3,8 +3,9 @@ import time
 import os
 from dotenv import load_dotenv
 from DB.obtener_peliculas import obtener_peliculas_BD
-from supabase import Client, create_client
+from DB.peliculas_usuarios import verificar_genero_actor
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
@@ -13,37 +14,75 @@ openai.api_key = os.getenv("API_KEY")
 
 def IA_peliculas(genero, actor ,username,n):
 
-    peliculas=obtener_peliculas_BD(username)
+    peliculas=obtener_peliculas_BD(username,actor,genero)
+    print(peliculas)
+    peliculas_gustadas=[]
+
     n=5-n
-    # Genera una respuesta a partir de un prompt
-    promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas sin informacion antes ni despues ,"
-    
-    if len(genero)!=0:
-        promt += "de generos, "
-        for i in genero:
-            promt = promt + i + ","
 
-    if len(actor)!=0:
-        promt += " con los actores, "
-        for i in actor:
-            promt = promt + i + ","        
-
-    if len(peliculas)!=0:
-
-        promt += " sabiendo que me gustan las peliculas "
-
-        for i in peliculas:
-            if i["like"]==True:
-                promt = promt + i["title"] + ","
-
-
-        promt += " y sabiendo que no me gustan las peliculas "
-
-        for i in peliculas:
-            if i["like"]==False:
-                promt = promt + i["title"] + ","                 
+    if n==1:
+        promt="Recomiendame solo el nombre de una pelicula en ingles sin informacion antes ni despues ,"
         
-    promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas."
+        if genero:
+            promt += "de genero, "
+            for i in genero:
+                promt = promt + i + ","
+
+        if actor:
+            promt += " con el actores, "
+            for i in actor:
+                promt = promt + i + ","        
+
+        if len(peliculas)!=0:
+
+            promt += "sabiendo que me gustan las peliculas "
+
+            for i in peliculas:
+                if peliculas[i]==1:
+                    peliculas_gustadas.append(i)
+                    promt = promt + i + ","
+
+
+            promt += " y sabiendo que no me gustan las peliculas "
+
+            for i in peliculas:
+                if peliculas[i]==0:
+                    promt = promt + i + ","                 
+            
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin el año de estreno, sin corchetes, separado por comas, sin comillas, sin espacios y sin puntos."
+
+    else:
+        # Genera una respuesta a partir de un prompt
+        promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas en ingles sin informacion antes ni despues ,"
+        
+        if genero:
+            promt += "de genero, "
+            for i in genero:
+                promt = promt + i + ","
+
+        if actor:
+            promt += " con el actor, "
+            for i in actor:
+                promt = promt + i + ","        
+
+        if len(peliculas)!=0:
+
+            promt += " sabiendo que me gustan las peliculas "
+
+            for i in peliculas:
+                if peliculas[i]==1:
+                    peliculas_gustadas.append(i)
+                    promt = promt + i + ","
+
+
+            promt += " y sabiendo que no me gustan las peliculas "
+
+            for i in peliculas:
+                if peliculas[i]==0:
+                    promt = promt + i + ","                 
+            
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra,  sin el año de estreno, sin corchetes, separado por comas, sin comillas, sin espacios y sin puntos."
+
 
     print(promt)
 
@@ -54,7 +93,7 @@ def IA_peliculas(genero, actor ,username,n):
         messages=[
             {"role": "system", "content": promt },
         ],
-    temperature=0.7)
+    temperature=0.2)
 
     end_time = time.time()
 
@@ -65,6 +104,10 @@ def IA_peliculas(genero, actor ,username,n):
 
     # Mostrar la respuesta
     respuesta_generada = respuesta_generada.split(",")
+
+    if n!=5:
+        for i in peliculas_gustadas:
+            respuesta_generada.append(i)
 
     respuesta={
         "movies":respuesta_generada,

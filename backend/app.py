@@ -47,24 +47,25 @@ def consulta_IA():
 @app.route('/movies/like', methods=['POST'])
 def insertar():
     request_data = request.json
-    email_user = request_data['email_user']
+    email_user = request_data['usuario']
     title_movie = request_data['title_movie']
     interaction = request_data['interaction']
-    #Select * From r_history where email_user = email_user and title_movie = title_movie
-    #Si no existe, insertar
-    #Si existe, actualizar
+
+    # Verificar si la película ya existe en la base de datos
     movies = supabase.table('r_history').select('*').eq('user', email_user).eq('title_movie', title_movie).execute()
     
-    if(len(movies.data)):
-        supabase.table('r_history').update({'interaction': interaction}).eq('user', email_user).eq('title_movie', title_movie).execute()
-    else:
-        supabase.table('r_history').insert([{'user': email_user, 'title_movie': title_movie, 'interaction': interaction,"date":datetime.datetime.now().date().isoformat()}]).execute()
+    if len(movies.data) > 0:
+        # Actualizar la columna 'interaction' de todas las películas encontradas
+        for movie in movies.data:
+            supabase.table('r_history').update({'interaction': interaction}).eq('title_movie', movie['title_movie']).eq('user', movie['user']).execute()
         
-    return jsonify({"message": "Se ha insertado la pelicula"}), 200
+        return jsonify({"message": f"Se han actualizado {len(movies.data)} película"}), 200
+    else:
+        return jsonify({"message": "No se encontró la película"}), 404
 
 
 def create_app():
     return app
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5002)
+    app.run(debug=True,port=5000)

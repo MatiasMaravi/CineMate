@@ -9,20 +9,18 @@ load_dotenv()
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 
-supabase = create_client(url, key)
+supabase = create_client(url, key)  
 
-def obtener_peliculas_BD(username):
+def obtener_peliculas_BD(username,actor,genero):
 
-    data = supabase.table('r_history').select('title_movie','interaction').eq('user', username).execute()
+    data = supabase.table('r_history').select('title_movie','interaction').eq('user', username).filter('actor', 'eq', actor).filter('genre', 'eq', genero).execute()
     data = json.loads(data.model_dump_json())
-    respuesta = []
-
+    respuesta = {}
+    print(data)
     for i in data['data']:
-        if i["interaction"] == '1':
-            respuesta.append({'title': i['title_movie'], 'like': True})
-        else:
-            respuesta.append({'title': i['title_movie'], 'like': False})
+        if i['title_movie'] not in respuesta:
+            respuesta[i['title_movie']] = i['interaction']
+            
+    return respuesta
 
-    return respuesta        
 
-#supabase.table('r_history').update({'interaction': '1'}).eq('email_user', 'cristianvargas.com').eq('title_movie', 'Sideways').execute()

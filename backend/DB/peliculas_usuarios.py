@@ -27,7 +27,7 @@ def usuario_peliculas(usuario,genero,actor,peliculas):
              except Exception as e:
                 print(f'Se alcanzo el limite de recomendaciones')
                 print(f'Error: {e}')
-                return None   
+                return "Se alcanzo el limite de recomendaciones para ese actor y genero"  
             return diccionario
 
     except Exception as e:
@@ -38,13 +38,6 @@ def verificar_genero_actor(usuario,genero,actor):
         
         if actor and genero:
             data = supabase.table('r_history').select('*').eq('user', usuario).filter('actor', 'eq', actor).filter('genre', 'eq', genero).filter('interaction', 'eq', 1).execute()
-            data = json.loads(data.model_dump_json())
-        elif actor:
-            data = supabase.table('r_history').select('*').eq('user', usuario).filter('actor', 'eq', actor).filter('interaction', 'eq', 1).execute()
-            data = json.loads(data.model_dump_json())
-
-        elif genero:
-            data = supabase.table('r_history').select('*').eq('user', usuario).filter('genre', 'eq', genero).filter('interaction', 'eq', 1).execute()
             data = json.loads(data.model_dump_json())
                 
         else:
