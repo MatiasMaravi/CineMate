@@ -21,21 +21,20 @@ def IA_peliculas(genero, actor ,username,n):
     n=5-n
 
     if n==1:
-        promt="Recomiendame solo el nombre de una pelicula en ingles sin informacion antes ni despues ,"
+        promt="Recomiendame unicamente  solo el nombre de 1 pelicula distinta sin informacion antes ni despues,"
         
         if genero:
-            promt += "de genero, "
+            promt += "que sea del genero,"
             for i in genero:
                 promt = promt + i + ","
 
         if actor:
-            promt += " con el actores, "
+            promt += " donde participo el actor, "
             for i in actor:
-                promt = promt + i + ","        
+                promt = promt + i + ","                 
 
         if len(peliculas)!=0:
-
-            promt += "sabiendo que me gustan las peliculas "
+            promt+="distinta a  "   
 
             for i in peliculas:
                 if peliculas[i]==1:
@@ -43,31 +42,30 @@ def IA_peliculas(genero, actor ,username,n):
                     promt = promt + i + ","
 
 
-            promt += " y sabiendo que no me gustan las peliculas "
-
             for i in peliculas:
                 if peliculas[i]==0:
                     promt = promt + i + ","                 
             
-        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin el año de estreno, sin corchetes, separado por comas, sin comillas, sin espacios y sin puntos."
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas y sin puntos."
 
     else:
         # Genera una respuesta a partir de un prompt
-        promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas en ingles sin informacion antes ni despues ,"
+        promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas sin informacion antes ni despues ,"
         
         if genero:
-            promt += "de genero, "
+            promt += "que sean del genero, "
             for i in genero:
                 promt = promt + i + ","
 
         if actor:
-            promt += " con el actor, "
+            promt += " donde participo el actor, "
             for i in actor:
-                promt = promt + i + ","        
+                promt = promt + i + ","            
 
         if len(peliculas)!=0:
 
-            promt += " sabiendo que me gustan las peliculas "
+            promt+="distintas a  "  
+
 
             for i in peliculas:
                 if peliculas[i]==1:
@@ -75,13 +73,11 @@ def IA_peliculas(genero, actor ,username,n):
                     promt = promt + i + ","
 
 
-            promt += " y sabiendo que no me gustan las peliculas "
-
             for i in peliculas:
                 if peliculas[i]==0:
                     promt = promt + i + ","                 
             
-        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra,  sin el año de estreno, sin corchetes, separado por comas, sin comillas, sin espacios y sin puntos."
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas y sin puntos."
 
 
     print(promt)
@@ -89,11 +85,11 @@ def IA_peliculas(genero, actor ,username,n):
     start_time = time.time()
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-16k",
         messages=[
             {"role": "system", "content": promt },
         ],
-    temperature=0.2)
+    temperature=0.7)
 
     end_time = time.time()
 
@@ -105,9 +101,7 @@ def IA_peliculas(genero, actor ,username,n):
     # Mostrar la respuesta
     respuesta_generada = respuesta_generada.split(",")
 
-    if n!=5:
-        for i in peliculas_gustadas:
-            respuesta_generada.append(i)
+    print(respuesta_generada)
 
     respuesta={
         "movies":respuesta_generada,

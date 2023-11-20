@@ -27,18 +27,21 @@ def consulta_IA():
         if count==5:
             diccionario= peliculas_base
             return jsonify(diccionario), 200
-        else:
-            if(len(movie_generos) == 0):
+        elif count<5:
+            if not movie_generos:
                 recommendations = IA_peliculas([],movie_actores,usuario,count)
-            elif(len(movie_actores) == 0):
+            elif not movie_actores:
                 recommendations = IA_peliculas(movie_generos,[],usuario,count)
-            elif (len(movie_generos) != 0 and len(movie_actores)!=0):
+            elif movie_generos  and  movie_actores:
                 recommendations = IA_peliculas(movie_generos,movie_actores,usuario,count)
             print(recommendations)
             # Obtener los nombres de las películas recomendadas
             recommended_movie_titles = recommendations["movies"]
 
             diccionario= usuario_peliculas(usuario,movie_generos[0],movie_actores[0],recommended_movie_titles)
+
+            if len(peliculas_base)>0:
+                diccionario["movies"].extend(peliculas_base)
 
             return jsonify(diccionario), 200
     except Exception as e:
