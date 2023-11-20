@@ -13,7 +13,8 @@ supabase = create_client(url, key)
 
 def obtener_peliculas_BD(username,actor,genero):
 
-    data = supabase.table('r_history').select('title_movie','interaction').eq('user', username).filter('actor', 'eq', actor).filter('genre', 'eq', genero).execute()
+    print(username,actor,genero)
+    data = supabase.table('r_history').select('*').eq('user', username).filter('actor', 'eq', actor).filter('genre', 'eq', genero).execute()
     data = json.loads(data.model_dump_json())
     respuesta = {}
     print(data)
@@ -22,5 +23,4 @@ def obtener_peliculas_BD(username,actor,genero):
             respuesta[i['title_movie']] = i['interaction']
             
     return respuesta
-
 

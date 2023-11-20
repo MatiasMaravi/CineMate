@@ -14,7 +14,7 @@ openai.api_key = os.getenv("API_KEY")
 
 def IA_peliculas(genero, actor ,username,n):
 
-    peliculas=obtener_peliculas_BD(username,actor,genero)
+    peliculas=obtener_peliculas_BD(username,actor[0],genero[0])
     print(peliculas)
     peliculas_gustadas=[]
 
