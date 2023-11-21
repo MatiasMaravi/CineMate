@@ -4,22 +4,20 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-url = os.getenv("URL")
-key = os.getenv("KEY")
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 class Usuario:
-    def _init_(self, email, name, password):
-        self.email = email
-        self.name = name
-        self.password = password
-
-    def insertar(self,user):
-        data, count = supabase.table('usuarios').insert(user).execute()
+    @staticmethod
+    def insertar(user):
+        data, count = supabase.table('usuario').insert(user).execute()
         return data
 
+"""
+
     def obtener(self):
-        response = supabase.table('usuarios').select("*").execute()
+        response = supabase.table('usuario').select("*").execute()
         data = response.data
         formatted_data = json.dumps(data, indent=4)
 
@@ -38,3 +36,4 @@ usuario1 = Usuario("alejo@gmail.com", "Alejo", "chupetin23")
 # Acceder a los atributos del usuario
 
 usuario1.insertar()
+"""

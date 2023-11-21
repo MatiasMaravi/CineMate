@@ -2,8 +2,10 @@
 from flask import Flask, jsonify, request
 from supabase import create_client, Client
 from DB.peliculas_usuarios import usuario_peliculas , verificar_genero_actor
+from DB.conect import Usuario
 from IA.api_chat import IA_peliculas
 import os 
+import re
 from dotenv import load_dotenv
 import datetime
 app = Flask(__name__)
@@ -13,6 +15,39 @@ load_dotenv()
 url = os.getenv("SUPABASE_URL")
 key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
+
+
+# nueva ruta para register
+@app.route('/register', methods=['POST'])
+def register():
+    try:
+        request_data = request.json
+        # validacion de campos completos
+        if 'email' not in request_data or 'name' not in request_data or 'password' not in request_data:
+            return jsonify({"error": "Todos los campos son obligatorios"}), 400
+
+        email = request_data['email']
+        name = request_data['name']
+        password = request_data['password']
+
+        # validacion de formato de correo electrónico
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return jsonify({"error": "Formato de correo electrónico inválido"}), 400
+
+        respuesta = Usuario.insertar({
+            'email': email,
+            'name': name,
+            'password': password
+        })
+
+        if respuesta:
+            return jsonify({"message": "Usuario registrado correctamente"}), 200
+        else:
+            return jsonify({"error": "Error al registrar usuario"}), 500
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 
 @app.route('/movies', methods=['POST'])
 def consulta_IA():
