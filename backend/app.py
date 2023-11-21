@@ -22,7 +22,7 @@ def consulta_IA():
         movie_generos = request_data['generos']
         movie_actores = request_data['actores']
 
-        peliculas_base,count=verificar_genero_actor(usuario,movie_generos[0],movie_actores[0])
+        peliculas_base,count=verificar_genero_actor(usuario)
 
         if count==5:
             diccionario= peliculas_base
@@ -38,12 +38,14 @@ def consulta_IA():
             # Obtener los nombres de las películas recomendadas
             recommended_movie_titles = recommendations["movies"]
 
-            diccionario= usuario_peliculas(usuario,movie_generos[0],movie_actores[0],recommended_movie_titles)
+            diccionario= usuario_peliculas(usuario,recommended_movie_titles)
 
             if len(peliculas_base)>0:
                 diccionario["movies"].extend(peliculas_base)
 
             return jsonify(diccionario), 200
+        elif count >5:
+            return jsonify({"message": "Se alcanzo el limite de recomendaciones para ese actor y genero"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 404
 
@@ -71,4 +73,4 @@ def create_app():
     return app
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5000)
+    app.run(debug=True,port=5002)
