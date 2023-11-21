@@ -13,7 +13,7 @@ key = os.getenv("SUPABASE_KEY")
 supabase = create_client(url, key)
 
 
-def usuario_peliculas(usuario,genero,actor,peliculas):
+def insertar_peliculas(usuario,peliculas):
 
     table_1="r_history"
 
@@ -21,27 +21,27 @@ def usuario_peliculas(usuario,genero,actor,peliculas):
             diccionario= {"movies":[]}
             for title in peliculas:
              try:
-                data_to_insert = {"user": usuario, "genre":genero,"actor":actor,"title_movie": title,"interaction":1,"date":datetime.datetime.now().date().isoformat()}
-                diccionario["movies"].append(title)
+                data_to_insert = {"user": usuario,"title_movie": title,"interaction":1,"date":datetime.datetime.now().date().isoformat()}
+                data=supabase.table(table_1).select('*').eq('user', usuario).eq('title_movie', title).execute()
+                if len(data.data) > 0:
+                    continue
                 supabase.table(table_1).insert(data_to_insert).execute()
+                diccionario["movies"].append(title)
              except Exception as e:
                 print(f'Se alcanzo el limite de recomendaciones')
                 print(f'Error: {e}')
-                return "Se alcanzo el limite de recomendaciones para ese actor y genero"  
+                return "Se alcanzo el limite de recomendaciones"
             return diccionario
 
     except Exception as e:
         print(f'Error: {e}')
         return None
 
-def verificar_genero_actor(usuario,genero,actor):
-        
-        if actor and genero:
-            data = supabase.table('r_history').select('*').eq('user', usuario).filter('actor', 'eq', actor).filter('genre', 'eq', genero).filter('interaction', 'eq', 1).execute()
-            data = json.loads(data.model_dump_json())
-                
-        else:
-            return None, 0        
+def verificar_peliculas(usuario):
+        # Verificar el numero de peliculas que le gustan al usuario
+
+        data = supabase.table('r_history').select('*').eq('user', usuario).filter('interaction', 'eq', 1).execute()
+        data = json.loads(data.model_dump_json())      
 
         movies = [movie['title_movie'] for movie in data['data']]
 

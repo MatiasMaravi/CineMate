@@ -14,8 +14,8 @@ openai.api_key = os.getenv("API_KEY")
 
 def IA_peliculas(genero, actor ,username,n):
 
-    peliculas=obtener_peliculas_BD(username,actor[0],genero[0])
-    print(peliculas)
+    peliculas=obtener_peliculas_BD(username)
+
     peliculas_gustadas=[]
 
     n=5-n
@@ -34,7 +34,7 @@ def IA_peliculas(genero, actor ,username,n):
                 promt = promt + i + ","                 
 
         if len(peliculas)!=0:
-            promt+="distinta a  "   
+            promt+="distintas pero sabiendo que me gustaron las peliculas, "   
 
             for i in peliculas:
                 if peliculas[i]==1:
@@ -42,6 +42,7 @@ def IA_peliculas(genero, actor ,username,n):
                     promt = promt + i + ","
 
 
+            promt+="y sabiendo que no me gustaron las peliculas,"
             for i in peliculas:
                 if peliculas[i]==0:
                     promt = promt + i + ","                 
@@ -64,7 +65,7 @@ def IA_peliculas(genero, actor ,username,n):
 
         if len(peliculas)!=0:
 
-            promt+="distintas a  "  
+            promt+="distintas pero sabiendo que me gustaron las peliculas, "   
 
 
             for i in peliculas:
@@ -72,6 +73,7 @@ def IA_peliculas(genero, actor ,username,n):
                     peliculas_gustadas.append(i)
                     promt = promt + i + ","
 
+            promt+="y sabiendo que no me gustaron las peliculas,"
 
             for i in peliculas:
                 if peliculas[i]==0:
@@ -99,9 +101,7 @@ def IA_peliculas(genero, actor ,username,n):
     respuesta_generada = response['choices'][0]['message']['content']
 
     # Mostrar la respuesta
-    respuesta_generada = respuesta_generada.split(",")
-
-    print(respuesta_generada)
+    respuesta_generada = respuesta_generada.split(", ")
 
     respuesta={
         "movies":respuesta_generada,
