@@ -3,54 +3,89 @@ import time
 import os
 from dotenv import load_dotenv
 from DB.obtener_peliculas import obtener_peliculas_BD
-from supabase import Client, create_client
+from DB.peliculas_usuarios import verificar_genero_actor
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
 # Configura la API key
 openai.api_key = os.getenv("API_KEY")
 
-def IA_peliculas(generos, actores,username):
+def IA_peliculas(genero, actor ,username,n):
 
-    peliculas=obtener_peliculas_BD(username)
+    peliculas=obtener_peliculas_BD(username,actor[0],genero[0])
+    print(peliculas)
+    peliculas_gustadas=[]
 
-    # Genera una respuesta a partir de un prompt
-    promt="Recomiendame solo los nombres de 5 peliculas distintas sin informacion antes ni despues ,"
-    
-    if len(generos)!=0:
-        promt += "de generos, "
-        for i in generos:
-            promt = promt + i + ","
+    n=5-n
 
-    if len(actores)!=0:
-        promt += " con los actores, "
-        for i in actores:
-            promt = promt + i + ","        
-
-    if len(peliculas)!=0:
-
-        promt += " sabiendo que me gustan las peliculas "
-
-        for i in peliculas:
-            if i["like"]==True:
-                promt = promt + i["title"] + ","
-
-
-        promt += " y sabiendo que no me gustan las peliculas "
-
-        for i in peliculas:
-            if i["like"]==False:
-                promt = promt + i["title"] + ","                 
+    if n==1:
+        promt="Recomiendame unicamente  solo el nombre de 1 pelicula distinta sin informacion antes ni despues,"
         
-    promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas."
+        if genero:
+            promt += "que sea del genero,"
+            for i in genero:
+                promt = promt + i + ","
+
+        if actor:
+            promt += " donde participo el actor, "
+            for i in actor:
+                promt = promt + i + ","                 
+
+        if len(peliculas)!=0:
+            promt+="distinta a  "   
+
+            for i in peliculas:
+                if peliculas[i]==1:
+                    peliculas_gustadas.append(i)
+                    promt = promt + i + ","
+
+
+            for i in peliculas:
+                if peliculas[i]==0:
+                    promt = promt + i + ","                 
+            
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas y sin puntos."
+
+    else:
+        # Genera una respuesta a partir de un prompt
+        promt="Recomiendame solo los nombres de " + str(n) +" peliculas distintas sin informacion antes ni despues ,"
+        
+        if genero:
+            promt += "que sean del genero, "
+            for i in genero:
+                promt = promt + i + ","
+
+        if actor:
+            promt += " donde participo el actor, "
+            for i in actor:
+                promt = promt + i + ","            
+
+        if len(peliculas)!=0:
+
+            promt+="distintas a  "  
+
+
+            for i in peliculas:
+                if peliculas[i]==1:
+                    peliculas_gustadas.append(i)
+                    promt = promt + i + ","
+
+
+            for i in peliculas:
+                if peliculas[i]==0:
+                    promt = promt + i + ","                 
+            
+        promt+="y devuelvemelo en formato python de lista, en una sola linea, sin informacion extra, sin corchetes, separado por comas, sin comillas y sin puntos."
+
 
     print(promt)
 
     start_time = time.time()
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo-16k",
         messages=[
             {"role": "system", "content": promt },
         ],
@@ -65,6 +100,8 @@ def IA_peliculas(generos, actores,username):
 
     # Mostrar la respuesta
     respuesta_generada = respuesta_generada.split(",")
+
+    print(respuesta_generada)
 
     respuesta={
         "movies":respuesta_generada,
