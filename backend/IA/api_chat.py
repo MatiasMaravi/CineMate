@@ -3,7 +3,6 @@ import time
 import os
 from dotenv import load_dotenv
 from DB.obtener_peliculas import obtener_peliculas_BD
-from DB.peliculas_usuarios import verificar_genero_actor
 from dotenv import load_dotenv
 import re
 

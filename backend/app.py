@@ -22,7 +22,7 @@ def consulta_IA():
         movie_generos = request_data['generos']
         movie_actores = request_data['actores']
 
-        peliculas_base,count=verificar_peliculas(usuario,movie_generos,movie_actores)
+        peliculas_base,count=verificar_peliculas(usuario)
 
         if count==10:
             diccionario= peliculas_base
