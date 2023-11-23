@@ -5,6 +5,7 @@ from DB.peliculas_usuarios import usuario_peliculas , verificar_genero_actor
 from DB.conect import Usuario
 from IA.api_chat import IA_peliculas
 import os 
+import jwt
 import re
 from dotenv import load_dotenv
 import datetime
@@ -22,7 +23,7 @@ supabase: Client = create_client(url, key)
 def register():
     try:
         request_data = request.json
-        # validacion de campos completos
+        # Validación de campos completos
         if 'email' not in request_data or 'name' not in request_data or 'password' not in request_data:
             return jsonify({"error": "Todos los campos son obligatorios"}), 400
 
@@ -30,9 +31,11 @@ def register():
         name = request_data['name']
         password = request_data['password']
 
-        # validacion de formato de correo electrónico
+        # Validación de formato de correo electrónico
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             return jsonify({"error": "Formato de correo electrónico inválido"}), 400
+
+
 
         respuesta = Usuario.insertar({
             'email': email,
@@ -46,7 +49,11 @@ def register():
             return jsonify({"error": "Error al registrar usuario"}), 500
 
     except Exception as e:
+        if "duplicate key value violates unique constraint" in str(e):
+            return jsonify({"error": "El usuario ya está registrado"}), 409
         return jsonify({"error": str(e)}), 400
+
+
 
 
 @app.route('/movies', methods=['POST'])
