@@ -17,7 +17,7 @@ def IA_peliculas(genero, actor ,username,n):
 
     peliculas_gustadas=[]
 
-    n=5-n
+    n=10-n
 
     if n==1:
         promt="Recomiendame unicamente  solo el nombre de 1 pelicula distinta sin informacion antes ni despues,"
