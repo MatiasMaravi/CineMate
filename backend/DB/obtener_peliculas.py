@@ -11,10 +11,9 @@ key = os.environ.get("SUPABASE_KEY")
 
 supabase = create_client(url, key)  
 
-def obtener_peliculas_BD(username,actor,genero):
+def obtener_peliculas_BD(username):
 
-    print(username,actor,genero)
-    data = supabase.table('r_history').select('*').eq('user', username).filter('actor', 'eq', actor).filter('genre', 'eq', genero).execute()
+    data = supabase.table('r_history').select('*').eq('user', username).execute()
     data = json.loads(data.model_dump_json())
     respuesta = {}
     print(data)
