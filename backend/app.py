@@ -1,12 +1,28 @@
-#from recommendation.core import get_genre_recommendations
 from flask import Flask, jsonify, request
+from flask_restful import Api, Resource, reqparse
+from flask_swagger_ui import get_swaggerui_blueprint
 from supabase import create_client, Client
 from DB.peliculas_usuarios import insertar_peliculas , verificar_peliculas
+from DB.conect import Usuario
 from IA.api_chat import IA_peliculas
 import os 
+import re
 from dotenv import load_dotenv
 import datetime
 app = Flask(__name__)
+
+SWAGGER_URL = '/swagger'  # URL for exposing Swagger UI (without trailing '/')
+API_URL = '/static/swagger.json'  # Our API url (can of course be a local resource)
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "Test application",
+    },
+)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 load_dotenv()
 
