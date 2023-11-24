@@ -1,0 +1,246 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Recomendaciones de Películas API",
+    "version": "1.0.0",
+    "title": "Recomendaciones de Películas API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Movies API",
+      "description": "API for movie recommendations and interactions"
+    },
+    {
+      "name": "User API",
+      "description": "API for user registration"
+    }
+  ],
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "MovieRecommendation": {
+        "type": "object",
+        "properties": {
+          "movie_titles": {
+            "type": "array",
+              "items": {
+                "type": "string"
+              }
+          }
+        }
+      },
+      "UserInteraction": {
+        "type": "object",
+        "properties": {
+          "usuario": {
+            "type": "string"
+          },
+          "title_movie": {
+            "type": "string"
+          },
+          "interaction": {
+            "type": "number"
+          }
+        }
+      },
+      "UserRegistration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["User Registration"],
+        "summary": "Register a new user",
+        "requestBody": {
+          "description": "Post user registration details",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegistration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "value":"Usuario registrado correctamente"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/movies": {
+      "post": {
+        "tags": ["Get Movie Recommendations"],
+        "summary": "Get movie recommendations based on user preferences",
+        "requestBody": {
+          "description": "Post user preferences for movie recommendations",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuario": {
+                    "type": "string"
+                  },
+                  "generos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "actores": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "movies": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MovieRecommendation"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    },
+    "/movies/like": {
+      "post": {
+        "tags": ["Insert Movie Interaction"],
+        "summary": "Insert or update user interactions with movies",
+        "requestBody": {
+          "description": "Post user interactions with movies",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserInteraction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND"
+          }
+        }
+      }
+    }
+  }
+}
